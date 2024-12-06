@@ -6,13 +6,14 @@ import Authentication from "./components/Authentication"
 import History from "./components/History"
 import Modal from "./components/Modal"
 import { useAuth } from "./context/AuthContext"
+import { coffeeConsumptionHistory } from "./utils"
 
 
 
 function App() {
-  const {globalUser, globalData} = useAuth()
+  const {globalUser, isLoading, globalData} = useAuth()
   const isAuthenticated = globalUser
-  const isData = globalData && Object.keys(globalData || {}).length
+  const isData = globalData && !!Object.keys(globalData || {}).length
 
   const authenticatedContent = (
     <>
@@ -27,6 +28,9 @@ function App() {
       <Layout>
         <Hero />
         <CoffeeForm isAuthenticated={isAuthenticated}/>
+        {(isAuthenticated && isLoading) && (
+          <p>Loading data...</p>
+        )}
         {(isAuthenticated && isData) && (authenticatedContent)}
       </Layout>
 
